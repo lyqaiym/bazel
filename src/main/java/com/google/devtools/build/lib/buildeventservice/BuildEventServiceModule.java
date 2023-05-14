@@ -163,7 +163,8 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
     // Don't hide unchecked exceptions as part of the error reporting.
     Throwables.throwIfUnchecked(exception);
 
-    logger.atSevere().withCause(exception).log(msg);
+    logger.atSevere().withCause(exception).log("%s",msg);
+//    logger.atSevere().withCause(exception).log(msg);
     reportCommandLineError(commandLineReporter, exception);
     moduleEnvironment.exit(createAbruptExitException(exception, msg, besCode));
   }
@@ -254,7 +255,7 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
                   + "Cancelling and starting a new invocation...",
               waitedMillis / 1000, waitedMillis % 1000);
       reporter.handle(Event.warn(msg));
-      logger.atWarning().withCause(exception).log(msg);
+      logger.atWarning().withCause(exception).log("%s",msg);
       cancelCloseFutures = true;
     } catch (ExecutionException e) {
       String msg;
@@ -274,7 +275,7 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
                 e.getMessage());
       }
       reporter.handle(Event.warn(msg));
-      logger.atWarning().withCause(e).log(msg);
+      logger.atWarning().withCause(e).log("%s",msg);
       cancelCloseFutures = true;
     } finally {
       if (cancelCloseFutures) {
@@ -416,10 +417,10 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
     closeFuturesWithTimeoutsMap =
         constructCloseFuturesMapWithTimeouts(streamer.getCloseFuturesMap());
     try {
-      logger.atInfo().log("Closing pending build event transports");
+      logger.atInfo().log("%s","Closing pending build event transports");
       Uninterruptibles.getUninterruptibly(Futures.allAsList(closeFuturesWithTimeoutsMap.values()));
     } catch (ExecutionException e) {
-      logger.atSevere().withCause(e).log("Failed to close a build event transport");
+      logger.atSevere().withCause(e).log("%s","Failed to close a build event transport");
     } finally {
       cancelAndResetPendingUploads();
     }
@@ -428,7 +429,7 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
   @Override
   public void blazeShutdownOnCrash(DetailedExitCode exitCode) {
     if (streamer != null) {
-      logger.atWarning().log("Attempting to close BES streamer on crash");
+      logger.atWarning().log("%s","Attempting to close BES streamer on crash");
       forceShutdownBuildEventStreamer(
           exitCode.getExitCode().equals(ExitCode.OOM_ERROR)
               ? AbortReason.OUT_OF_MEMORY
@@ -449,7 +450,7 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
           getMaxWaitForPreviousInvocation().getSeconds(),
           TimeUnit.SECONDS);
     } catch (TimeoutException | ExecutionException exception) {
-      logger.atWarning().withCause(exception).log(
+      logger.atWarning().withCause(exception).log("%s",
           "Encountered Exception when closing BEP transports in Blaze's shutting down sequence");
     } finally {
       cancelAndResetPendingUploads();
@@ -579,7 +580,7 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
       if (!streamer.isClosed()) {
         // This should not occur, but close with an internal error if a {@link BuildEventStreamer}
         // bug manifests as an unclosed streamer.
-        logger.atWarning().log("Attempting to close BES streamer after command");
+        logger.atWarning().log("%s","Attempting to close BES streamer after command");
         reporter.handle(Event.warn("BES was not properly closed"));
         forceShutdownBuildEventStreamer(AbortReason.INTERNAL);
       }
@@ -671,7 +672,7 @@ public abstract class BuildEventServiceModule<BESOptionsT extends BuildEventServ
           String.format(
               "Build Event Service uploads disabled due to a connectivity problem: %s", status);
       reporter.handle(Event.warn(message));
-      logger.atWarning().log(message);
+      logger.atWarning().log("%s",message);
       return null;
     }
 

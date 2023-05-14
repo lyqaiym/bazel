@@ -29,5 +29,24 @@ build:remote --config=ubuntu1804_java11
 
 build:macos --macos_minimum_os=10.10
 
+#src/main/java/com/google/devtools/common/options/OptionsUsage.java:59: 错误: 找不到符号
+#    String indentString = " ".repeat(indent);
+#                             ^
+#  符号:   方法 repeat(int)
+
+# Enable Bzlmod
+build:bzlmod --experimental_enable_bzlmod
+# TODO(pcloudy): The following should be removed after fixing https://github.com/bazelbuild/bazel/issues/14279
+build:bzlmod --crosstool_top=@rules_cc.0.0.1.cc_configure.local_config_cc//:toolchain
+build:bzlmod --xcode_version_config=@rules_cc.0.0.1.cc_configure.local_config_xcode//:host_xcodes
+
+# Enable Java 11 language features (https://github.com/bazelbuild/bazel/issues/14592)
+# Toolchain resolution configuration for Bazel >= 5
+build --java_language_version=11
+build --tool_java_language_version=11
+# Legacy configuration for Bazel <= 4
+build --java_toolchain=@bazel_tools//tools/jdk:toolchain_java11
+build --host_java_toolchain=@bazel_tools//tools/jdk:toolchain_java11
+
 # User-specific .bazelrc
 try-import user.bazelrc

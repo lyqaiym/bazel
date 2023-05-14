@@ -410,7 +410,7 @@ public class BuildView {
               "Analysis succeeded for only %d of %d top-level targets",
               numSuccessful, numTargetsToAnalyze);
       eventHandler.handle(Event.info(msg));
-      logger.atInfo().log(msg);
+      logger.atInfo().log("%s",msg);
     }
 
     AnalysisResult result;
@@ -468,7 +468,7 @@ public class BuildView {
               topLevelTargetsWithConfigsResult,
               /*includeExecutionPhase=*/ false);
     }
-    logger.atInfo().log("Finished analysis");
+    logger.atInfo().log("%s","Finished analysis");
     return result;
   }
 

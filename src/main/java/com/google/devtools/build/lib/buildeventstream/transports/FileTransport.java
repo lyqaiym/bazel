@@ -186,7 +186,8 @@ abstract class FileTransport implements BuildEventTransport {
                       .build()),
               e));
       pendingWrites.clear();
-      logger.atSevere().withCause(e).log(message);
+//      logger.atSevere().withCause(e).log(message);
+      logger.atSevere().withCause(e).log("%s", message);
     }
 
     private static BuildProgress.Code getBuildProgressCode(Throwable e) {

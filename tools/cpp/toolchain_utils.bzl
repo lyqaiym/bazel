@@ -20,6 +20,8 @@ Returns the toolchain if enabled, and falls back to a toolchain constructed from
 the CppConfiguration.
 """
 
+CPP_TOOLCHAIN_TYPE = "@bazel_tools//tools/cpp:toolchain_type"
+
 def find_cpp_toolchain(ctx):
     """
     Finds the c++ toolchain.
@@ -49,3 +51,23 @@ def find_cpp_toolchain(ctx):
 
     # We didn't find anything.
     fail("In order to use find_cpp_toolchain, you must define the '_cc_toolchain' attribute on your rule or aspect.")
+
+def use_cpp_toolchain(mandatory = True):
+    """
+    Helper to depend on the c++ toolchain.
+
+    Usage:
+    ```
+    my_rule = rule(
+        toolchains = [other toolchain types] + use_cpp_toolchain(),
+    )
+    ```
+
+    Args:
+      mandatory: Whether or not it should be an error if the toolchain cannot be resolved.
+        Currently ignored, this will be enabled when optional toolchain types are added.
+
+    Returns:
+      A list that can be used as the value for `rule.toolchains`.
+    """
+    return [CPP_TOOLCHAIN_TYPE]

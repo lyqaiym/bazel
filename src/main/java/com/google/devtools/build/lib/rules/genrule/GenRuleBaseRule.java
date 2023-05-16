@@ -24,6 +24,7 @@ import com.google.devtools.build.lib.analysis.BaseRuleClasses;
 import com.google.devtools.build.lib.analysis.RuleDefinition;
 import com.google.devtools.build.lib.analysis.RuleDefinitionEnvironment;
 import com.google.devtools.build.lib.analysis.config.ExecutionTransitionFactory;
+import com.google.devtools.build.lib.analysis.config.HostTransition;
 import com.google.devtools.build.lib.packages.Attribute;
 import com.google.devtools.build.lib.packages.AttributeMap;
 import com.google.devtools.build.lib.packages.BuildType;
@@ -82,7 +83,7 @@ public class GenRuleBaseRule implements RuleDefinition {
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(
             attr("tools", LABEL_LIST)
-                .cfg(ExecutionTransitionFactory.create())
+                .cfg(HostTransition.createFactory())
                 .allowedFileTypes(FileTypeSet.ANY_FILE))
 
         /* <!-- #BLAZE_RULE(genrule).ATTRIBUTE(exec_tools) -->

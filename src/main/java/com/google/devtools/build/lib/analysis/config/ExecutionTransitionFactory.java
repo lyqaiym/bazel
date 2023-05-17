@@ -125,7 +125,7 @@ public class ExecutionTransitionFactory
 
       // Then unset isHost.
       CoreOptions coreOptions = checkNotNull(execOptions.get(CoreOptions.class));
-      coreOptions.isHost = false;
+      coreOptions.isHost = true;
       coreOptions.isExec = true;
       coreOptions.platformSuffix =
           String.format("exec-%X", executionPlatform.getCanonicalForm().hashCode());

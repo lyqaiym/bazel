@@ -24,6 +24,7 @@ import com.google.devtools.build.lib.analysis.BaseRuleClasses;
 import com.google.devtools.build.lib.analysis.RuleDefinition;
 import com.google.devtools.build.lib.analysis.RuleDefinitionEnvironment;
 import com.google.devtools.build.lib.analysis.config.ExecutionTransitionFactory;
+import com.google.devtools.build.lib.analysis.config.HostTransition;
 import com.google.devtools.build.lib.packages.Attribute;
 import com.google.devtools.build.lib.packages.AttributeMap;
 import com.google.devtools.build.lib.packages.BuildType;
@@ -41,6 +42,9 @@ public class GenRuleBaseRule implements RuleDefinition {
   @Override
   public RuleClass build(
       RuleClass.Builder builder, RuleDefinitionEnvironment env) {
+      Object obj1 = HostTransition.createFactory();
+      Object obj2 = ExecutionTransitionFactory.create();
+      System.out.println("build:obj1=" + obj1 + ",obj2=" + obj2);
     return builder
 
         /* <!-- #BLAZE_RULE(genrule).ATTRIBUTE(srcs) -->
@@ -78,7 +82,8 @@ public class GenRuleBaseRule implements RuleDefinition {
         <p>
           Any <code>*_binary</code> or tool to be executed by <code>cmd</code> must appear in this
           list, not in <code>srcs</code>, to ensure they are built in the correct configuration.
-        </p>
+        </p>HostTransition.createFactory()
+        </p>ExecutionTransitionFactory.create()
         <!-- #END_BLAZE_RULE.ATTRIBUTE --> */
         .add(
             attr("tools", LABEL_LIST)
